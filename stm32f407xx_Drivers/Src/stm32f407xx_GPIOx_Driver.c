@@ -127,8 +127,8 @@ void GPIO_Init(GPIOx_Handle_t *pGPIOHandle)
 	(pGPIOHandle->GPIOx->OSPEEDR) &= ~(0x03 << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
 	(pGPIOHandle->GPIOx->OSPEEDR) |=  (pGPIOHandle->GPIO_PinConfig.PinSpeed << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
 
-//	(pGPIOHandle->GPIOx->PUPDR) &= ~(0x03 << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
-//	(pGPIOHandle->GPIOx->PUPDR) |=  (pGPIOHandle->GPIO_PinConfig.PinPuPdControl << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
+	(pGPIOHandle->GPIOx->PUPDR) &= ~(0x03 << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
+	(pGPIOHandle->GPIOx->PUPDR) |=  (pGPIOHandle->GPIO_PinConfig.PinPuPdControl << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
 
 	if(pGPIOHandle->GPIO_PinConfig.PinMode == GPIO_MODE_OUT){
 		(pGPIOHandle->GPIOx->OTYPER) &= ~(0x01 << pGPIOHandle->GPIO_PinConfig.PinNumber);
