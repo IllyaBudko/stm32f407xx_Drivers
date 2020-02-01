@@ -11,8 +11,4 @@
 #include "stm32f407xx.h"
 #include "stm32f407xx_Interrupt_Handling.h"
 
-
-
-
-
 #endif /* INC_STM32F407XX_USARTX_DRIVER_H_ */
