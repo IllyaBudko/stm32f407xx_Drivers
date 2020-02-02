@@ -27,9 +27,18 @@ static void I2C_StopCondition(I2Cx_RegDef_t *pI2Cx)
 	pI2Cx->CR1 |= (1 << I2C_CR1_STOP);
 }
 
-//address phase execution helper function
+//address phase write execution helper function
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-static void I2C_ExecuteAddrPhase(I2Cx_RegDef_t *pI2Cx, uint8_t slaveAddr)
+static void I2C_ExecuteAddrPhaseWrite(I2Cx_RegDef_t *pI2Cx, uint8_t slaveAddr)
+{
+	slaveAddr = slaveAddr << 1;
+	slaveAddr &= ~(1);
+	pI2Cx->DR = slaveAddr;
+}
+
+//address phase read execution helper function
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+static void I2C_ExecuteAddrPhaseRead(I2Cx_RegDef_t *pI2Cx, uint8_t slaveAddr)
 {
 	slaveAddr = slaveAddr << 1;
 	slaveAddr &= ~(1);
@@ -203,14 +212,14 @@ uint8_t I2C_GetFlagStatus(I2Cx_RegDef_t *pI2Cx, uint32_t flagName)
 	return FLAG_RESET;
 }
 
-//IRQ Interrupt configuration APIs
+//IRQ Master send data API
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void I2C_MasterSendData (I2Cx_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t Len, uint8_t slaveAddr)
 {
 	I2C_StartCondition(pI2CHandle->pI2Cx);
 
 	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_SB));
-	I2C_ExecuteAddrPhase(pI2CHandle->pI2Cx, slaveAddr);
+	I2C_ExecuteAddrPhaseWrite(pI2CHandle->pI2Cx, slaveAddr);
 
 	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_ADDR));
 	I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
@@ -224,6 +233,19 @@ void I2C_MasterSendData (I2Cx_Handle_t *pI2CHandle, uint8_t *pTxBuffer, uint32_t
 	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_TXE));
 	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_BTF));
 	I2C_StopCondition(pI2CHandle->pI2Cx);
+}
+//IRQ Master receive data API
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void I2C_MasterReceiveData (I2Cx_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint32_t Len, uint8_t slaveAddr)
+{
+	I2C_StartCondition(pI2CHandle->pI2Cx);
+
+	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_SB));
+	I2C_ExecuteAddrPhase(pI2CHandle->pI2Cx, slaveAddr);
+
+	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_ADDR));
+	I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
+
 }
 
 
