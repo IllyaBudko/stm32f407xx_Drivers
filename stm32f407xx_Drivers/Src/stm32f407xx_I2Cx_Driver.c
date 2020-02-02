@@ -41,7 +41,7 @@ static void I2C_ExecuteAddrPhaseWrite(I2Cx_RegDef_t *pI2Cx, uint8_t slaveAddr)
 static void I2C_ExecuteAddrPhaseRead(I2Cx_RegDef_t *pI2Cx, uint8_t slaveAddr)
 {
 	slaveAddr = slaveAddr << 1;
-	slaveAddr &= ~(1);
+	slaveAddr |= 1;
 	pI2Cx->DR = slaveAddr;
 }
 
@@ -241,11 +241,19 @@ void I2C_MasterReceiveData (I2Cx_Handle_t *pI2CHandle, uint8_t *pRxBuffer, uint3
 	I2C_StartCondition(pI2CHandle->pI2Cx);
 
 	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_SB));
-	I2C_ExecuteAddrPhase(pI2CHandle->pI2Cx, slaveAddr);
+	I2C_ExecuteAddrPhaseRead(pI2CHandle->pI2Cx, slaveAddr);
 
 	while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_ADDR));
 	I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
 
+	if(Len == 1) {
+		I2C_ManageAck(pI2CHandle->pI2Cx, DISABLE);
+		I2C_StopCondition(pI2CHandle->pI2Cx);
+		I2C_ClearADDRFlag(pI2CHandle->pI2Cx);
+		while(! I2C_GetFlagStatus(pI2CHandle->pI2Cx, I2C_FLAG_RXNE));
+		*pRxBuffer = pI2CHandle->pI2Cx->DR;
+		return;
+	}
 }
 
 
@@ -304,6 +312,25 @@ void I2C_AppEvCallback(I2Cx_Handle_t *pI2CHandle , uint8_t AppEv)
 {
 
 }
+
+//I2Cx acknowledgment management
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+void I2C_ManageAck(I2Cx_RegDef_t *pI2Cx, uint8_t ENorDi)
+{
+	if(ENorDi == ENABLE) {
+		pI2Cx->CR1 |= (1 << 10);
+	}
+	else {
+		pI2Cx->CR1 &= ~(1 << 10);
+	}
+}
+
+
+
+
+
+
+
 
 
 
