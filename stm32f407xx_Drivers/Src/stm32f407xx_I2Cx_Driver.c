@@ -167,6 +167,15 @@ void I2C_Init(I2Cx_Handle_t *pI2CHandle)
 		tempreg |= (ccrValue & 0xFFF);
 	}
 	pI2CHandle->pI2Cx->CCR = tempreg;
+
+	if(pI2CHandle->I2C_Config.I2C_SCLSpeed <= I2C_SCL_SPEED_SM) {
+		tempreg = (RCC_GetPCLK1_Value() / 1000000U) + 1;
+	}
+	else
+	{
+		tempreg = ((RCC_GetPCLK1_Value() * 300) / 1000000000U) + 1;
+	}
+	pI2CHandle->pI2Cx->TRISE = tempreg & 0x3F;
 }
 
 //I2Cx De-initialization
