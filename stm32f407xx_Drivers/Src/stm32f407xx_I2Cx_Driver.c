@@ -490,7 +490,50 @@ void I2C_EV_IRQHandling(I2Cx_Handle_t *pI2CHandle)
 
 void I2C_ERR_IRQHandling(I2Cx_Handle_t *pI2CHandle)
 {
+	uint32_t temp1,temp2;
+	//Know the status of  ITERREN control bit in the CR2
+	temp2 = (pI2CHandle->pI2Cx->CR2) & ( 1 << I2C_CR2_ITERREN);
+	temp1 = (pI2CHandle->pI2Cx->SR1) & ( 1<< I2C_SR1_BERR);
+	if(temp1  && temp2 )
+	{
+		//Implement the code to clear the buss error flag
+		pI2CHandle->pI2Cx->SR1 &= ~( 1 << I2C_SR1_BERR);
 
+		//Implement the code to notify the application about the error
+	   I2C_ApplicationEventCallback(pI2CHandle,I2C_ERROR_BERR);
+	}
+	temp1 = (pI2CHandle->pI2Cx->SR1) & ( 1 << I2C_SR1_ARLO );
+	if(temp1  && temp2)
+	{
+		//Implement the code to clear the arbitration lost error flag
+		pI2CHandle->pI2Cx->SR1 &= ~( 1 << I2C_SR1_ARLO);
+		//Implement the code to notify the application about the error
+		I2C_ApplicationEventCallback(pI2CHandle,I2C_ERROR_ARLO);
+	}
+	temp1 = (pI2CHandle->pI2Cx->SR1) & ( 1 << I2C_SR1_AF);
+	if(temp1  && temp2)
+	{
+		//Implement the code to clear the ACK failure error flag
+		pI2CHandle->pI2Cx->SR1 &= ~( 1 << I2C_SR1_AF);
+		//Implement the code to notify the application about the error
+		I2C_ApplicationEventCallback(pI2CHandle,I2C_ERROR_AF);
+	}
+	temp1 = (pI2CHandle->pI2Cx->SR1) & ( 1 << I2C_SR1_OVR);
+	if(temp1  && temp2)
+	{
+		//Implement the code to clear the Overrun/underrun error flag
+		pI2CHandle->pI2Cx->SR1 &= ~( 1 << I2C_SR1_OVR);
+		//Implement the code to notify the application about the error
+		I2C_ApplicationEventCallback(pI2CHandle,I2C_ERROR_OVR);
+	}
+	temp1 = (pI2CHandle->pI2Cx->SR1) & ( 1 << I2C_SR1_TIMEOUT);
+	if(temp1  && temp2)
+	{
+		//Implement the code to clear the Time out error flag
+		pI2CHandle->pI2Cx->SR1 &= ~( 1 << I2C_SR1_TIMEOUT);
+		//Implement the code to notify the application about the error
+		I2C_ApplicationEventCallback(pI2CHandle,I2C_ERROR_TIMEOUT);
+	}
 }
 
 //Peripheral control helper APIs
