@@ -79,7 +79,7 @@ void GPIO_Pclk_Init(GPIOx_RegDef_t *pGPIOx, uint8_t ENorDI)
 
 void GPIO_Init(GPIOx_Handle_t *pGPIOHandle)
 {
-	GPIO_Pclk_init(pGPIOHandle->GPIOx, ENABLE);
+	GPIO_Pclk_Init(pGPIOHandle->GPIOx, ENABLE);
 	if(pGPIOHandle->GPIO_PinConfig.PinMode < GPIO_MODE_ANALOG){
 		(pGPIOHandle->GPIOx->MODER) &= ~(0x03 << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
 		(pGPIOHandle->GPIOx->MODER) |=  (pGPIOHandle->GPIO_PinConfig.PinMode << 2 * (pGPIOHandle->GPIO_PinConfig.PinNumber));
@@ -102,16 +102,16 @@ void GPIO_Init(GPIOx_Handle_t *pGPIOHandle)
 		uint8_t portCode = GPIO_BASEADDR_TO_CODE(pGPIOHandle->GPIOx);
 
 		switch(extiNumber) {
-		case 1 :
+		case 0 :
 			SYSCFG->EXTICR1 |= portCode << (extiPinSelect * 4);
 			break;
-		case 2 :
+		case 1 :
 			SYSCFG->EXTICR2 |= portCode << (extiPinSelect * 4);
 			break;
-		case 3 :
+		case 2 :
 			SYSCFG->EXTICR3 |= portCode << (extiPinSelect * 4);
 			break;
-		case 4 :
+		case 3 :
 			SYSCFG->EXTICR4 |= portCode << (extiPinSelect * 4);
 			break;
 		}

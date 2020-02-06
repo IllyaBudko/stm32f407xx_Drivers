@@ -100,25 +100,25 @@
 
 //NVIC ICER register addresses
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#define NVIC_ICER0	((volatile uint32_t *)0xE000E100)		//ICER0 Register base address
-#define NVIC_ICER1	((volatile uint32_t *)0xE000E104)		//ICER1 Register base address
-#define NVIC_ICER2	((volatile uint32_t *)0xE000E108)		//ICER2 Register base address
-#define NVIC_ICER3	((volatile uint32_t *)0xE000E10C)		//ICER3 Register base address
-#define NVIC_ICER4	((volatile uint32_t *)0xE000E110)		//ICER4 Register base address
-#define NVIC_ICER5	((volatile uint32_t *)0xE000E114)		//ICER5 Register base address
-#define NVIC_ICER6	((volatile uint32_t *)0xE000E118)		//ICER6 Register base address
-#define NVIC_ICER7	((volatile uint32_t *)0xE000E11C)		//ICER7 Register base address
+#define NVIC_ISER0	((volatile uint32_t *)0xE000E100)		//ICER0 Register base address
+#define NVIC_ISER1	((volatile uint32_t *)0xE000E104)		//ICER1 Register base address
+#define NVIC_ISER2	((volatile uint32_t *)0xE000E108)		//ICER2 Register base address
+#define NVIC_ISER3	((volatile uint32_t *)0xE000E10C)		//ICER3 Register base address
+#define NVIC_ISER4	((volatile uint32_t *)0xE000E110)		//ICER4 Register base address
+#define NVIC_ISER5	((volatile uint32_t *)0xE000E114)		//ICER5 Register base address
+#define NVIC_ISER6	((volatile uint32_t *)0xE000E118)		//ICER6 Register base address
+#define NVIC_ISER7	((volatile uint32_t *)0xE000E11C)		//ICER7 Register base address
 
 //ISER register addresses
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#define NVIC_ISER0	((volatile uint32_t *)0xE000E180)		//ISER0 Register base address
-#define NVIC_ISER1	((volatile uint32_t *)0xE000E184)		//ISER1 Register base address
-#define NVIC_ISER2	((volatile uint32_t *)0xE000E188)		//ISER2 Register base address
-#define NVIC_ISER3	((volatile uint32_t *)0xE000E18C)		//ISER3 Register base address
-#define NVIC_ISER4	((volatile uint32_t *)0xE000E190)		//ISER4 Register base address
-#define NVIC_ISER5	((volatile uint32_t *)0xE000E194)		//ISER5 Register base address
-#define NVIC_ISER6	((volatile uint32_t *)0xE000E198)		//ISER6 Register base address
-#define NVIC_ISER7	((volatile uint32_t *)0xE000E19C)		//ISER7 Register base address
+#define NVIC_ICER0	((volatile uint32_t *)0xE000E180)		//ISER0 Register base address
+#define NVIC_ICER1	((volatile uint32_t *)0xE000E184)		//ISER1 Register base address
+#define NVIC_ICER2	((volatile uint32_t *)0xE000E188)		//ISER2 Register base address
+#define NVIC_ICER3	((volatile uint32_t *)0xE000E18C)		//ISER3 Register base address
+#define NVIC_ICER4	((volatile uint32_t *)0xE000E190)		//ISER4 Register base address
+#define NVIC_ICER5	((volatile uint32_t *)0xE000E194)		//ISER5 Register base address
+#define NVIC_ICER6	((volatile uint32_t *)0xE000E198)		//ISER6 Register base address
+#define NVIC_ICER7	((volatile uint32_t *)0xE000E19C)		//ISER7 Register base address
 
 //NVIC PR Base address
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
