@@ -10,6 +10,9 @@
 #include	<string.h>
 #include	"stm32f407xx.h"
 
+void delay(uint32_t n);
+void blink(GPIOx_RegDef_t *pGPIOx, uint32_t pinNum, uint32_t timeDelay);
+
 int main() {
 
 
@@ -54,44 +57,77 @@ int main() {
 	GPIO_IRQPriorityConfig(IRQ_NO_EXTI0, NVIC_IRQ_PRI15);
 	GPIO_IRQInterruptConfig(IRQ_NO_EXTI0, ENABLE);
 
+	uint32_t main_Time = 150000;
+
 	while(1) {
-		GPIO_WritePin(GPIOD, GPIO_PIN_12, SET);
-		for(uint32_t i=0; i<50000;i++);
-		GPIO_WritePin(GPIOD, GPIO_PIN_12, RESET);
-		for(uint32_t i=0; i<50000;i++);
-
-		GPIO_WritePin(GPIOD, GPIO_PIN_13, SET);
-		for(uint32_t i=0; i<50000;i++);
-		GPIO_WritePin(GPIOD, GPIO_PIN_13, RESET);
-		for(uint32_t i=0; i<50000;i++);
-
-		GPIO_WritePin(GPIOD, GPIO_PIN_14, SET);
-		for(uint32_t i=0; i<50000;i++);
-		GPIO_WritePin(GPIOD, GPIO_PIN_14, RESET);
-		for(uint32_t i=0; i<50000;i++);
-
-		GPIO_WritePin(GPIOD, GPIO_PIN_15, SET);
-		for(uint32_t i=0; i<50000;i++);
-		GPIO_WritePin(GPIOD, GPIO_PIN_15, RESET);
-		for(uint32_t i=0; i<50000;i++);
+		blink(GPIOD, GPIO_PIN_12, main_Time);
+		blink(GPIOD, GPIO_PIN_13, main_Time);
+		blink(GPIOD, GPIO_PIN_14, main_Time);
+		blink(GPIOD, GPIO_PIN_15, main_Time);
 	}
 }
 void EXTI0_IRQHandler (void) {
 
-//	uint8_t volatile bitCheck = (((GPIOA->IDR) >> GPIO_PIN_0) & 1U);
-
 	GPIO_IRQHandling(GPIO_PIN_0);
-	while((((GPIOA->IDR) >> GPIO_PIN_0) & 1U) == SET) {
-		GPIO_WritePin(GPIOD, GPIO_PIN_12, SET);
-		GPIO_WritePin(GPIOD, GPIO_PIN_13, SET);
-		GPIO_WritePin(GPIOD, GPIO_PIN_14, SET);
-		GPIO_WritePin(GPIOD, GPIO_PIN_15, SET);
+
+	uint32_t pinCheck;
+
+	pinCheck = (((GPIOD->ODR) >> GPIO_PIN_12) & 0xFF);
+
+	uint32_t IT_Time = 100000;
+
+	switch (pinCheck) {
+	case 1:
+		while((((GPIOA->IDR) >> GPIO_PIN_0) & 1U) == SET) {
+			blink(GPIOD, GPIO_PIN_12, IT_Time);
+			blink(GPIOD, GPIO_PIN_15, IT_Time);
+			blink(GPIOD, GPIO_PIN_14, IT_Time);
+			blink(GPIOD, GPIO_PIN_13, IT_Time);
+		}
+		break;
+	case 2:
+		while((((GPIOA->IDR) >> GPIO_PIN_0) & 1U) == SET) {
+			blink(GPIOD, GPIO_PIN_13, IT_Time);
+			blink(GPIOD, GPIO_PIN_12, IT_Time);
+			blink(GPIOD, GPIO_PIN_15, IT_Time);
+			blink(GPIOD, GPIO_PIN_14, IT_Time);
+		}
+		break;
+	case 4:
+		while((((GPIOA->IDR) >> GPIO_PIN_0) & 1U) == SET) {
+			blink(GPIOD, GPIO_PIN_14, IT_Time);
+			blink(GPIOD, GPIO_PIN_13, IT_Time);
+			blink(GPIOD, GPIO_PIN_12, IT_Time);
+			blink(GPIOD, GPIO_PIN_15, IT_Time);
+		}
+		break;
+	case 8:
+		while((((GPIOA->IDR) >> GPIO_PIN_0) & 1U) == SET) {
+			blink(GPIOD, GPIO_PIN_15, IT_Time);
+			blink(GPIOD, GPIO_PIN_14, IT_Time);
+			blink(GPIOD, GPIO_PIN_13, IT_Time);
+			blink(GPIOD, GPIO_PIN_12, IT_Time);
+		}
+		break;
 	}
-	GPIO_WritePin(GPIOD, GPIO_PIN_12, RESET);
-	GPIO_WritePin(GPIOD, GPIO_PIN_13, RESET);
-	GPIO_WritePin(GPIOD, GPIO_PIN_14, RESET);
-	GPIO_WritePin(GPIOD, GPIO_PIN_15, RESET);
 }
+
+void delay(uint32_t n) {
+	for(uint32_t i=0;i<n;i++);
+}
+
+void blink(GPIOx_RegDef_t *pGPIOx, uint32_t pinNum, uint32_t timeDelay) {
+	GPIO_WritePin(pGPIOx, pinNum, SET);
+	delay(timeDelay);
+	GPIO_WritePin(pGPIOx, pinNum, RESET);
+//	delay(timeDelay);
+}
+
+
+
+
+
+
 
 
 
