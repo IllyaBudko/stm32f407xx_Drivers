@@ -12,6 +12,7 @@
 
 void delay(uint32_t n);
 void blink(GPIOx_RegDef_t *pGPIOx, uint32_t pinNum, uint32_t timeDelay);
+void generalStream (void);
 
 int main() {
 
@@ -57,14 +58,8 @@ int main() {
 	GPIO_IRQPriorityConfig(IRQ_NO_EXTI0, NVIC_IRQ_PRI15);
 	GPIO_IRQInterruptConfig(IRQ_NO_EXTI0, ENABLE);
 
-	uint32_t main_Time = 150000;
+	generalStream();
 
-	while(1) {
-		blink(GPIOD, GPIO_PIN_12, main_Time);
-		blink(GPIOD, GPIO_PIN_13, main_Time);
-		blink(GPIOD, GPIO_PIN_14, main_Time);
-		blink(GPIOD, GPIO_PIN_15, main_Time);
-	}
 }
 void EXTI0_IRQHandler (void) {
 
@@ -123,7 +118,17 @@ void blink(GPIOx_RegDef_t *pGPIOx, uint32_t pinNum, uint32_t timeDelay) {
 //	delay(timeDelay);
 }
 
+void generalStream (void) {
 
+	uint32_t main_Time = 150000;
+
+	while(1) {
+		blink(GPIOD, GPIO_PIN_12, main_Time);
+		blink(GPIOD, GPIO_PIN_13, main_Time);
+		blink(GPIOD, GPIO_PIN_14, main_Time);
+		blink(GPIOD, GPIO_PIN_15, main_Time);
+	}
+}
 
 
 
