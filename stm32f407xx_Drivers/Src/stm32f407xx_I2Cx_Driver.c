@@ -564,5 +564,3 @@ void I2C_ManageAck(I2Cx_RegDef_t *pI2Cx, uint8_t ENorDi)
 
 
 
-
-
