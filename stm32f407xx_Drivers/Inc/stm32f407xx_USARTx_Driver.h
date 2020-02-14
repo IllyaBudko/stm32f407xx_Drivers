@@ -22,6 +22,12 @@ typedef volatile struct
 
 typedef volatile struct
 {
+	uint8_t *pTxBuffer;
+	uint8_t *pRxBuffer;
+	uint32_t TxLen;
+	uint32_t RxLen;
+	uint8_t TxBusyState;
+	uint8_t RxBusyState;
 	USARTx_RegDef_t *pUSARTx;
 	USART_Config_t   USART_Config;
 }USART_Handle_t;
@@ -83,6 +89,21 @@ typedef volatile struct
 #define USART_FLAG_LBD					8
 #define USART_FLAG_CTS					9
 
+//USARTx busy
+#define USART_BUSY_IN_RX				1
+#define USART_BUSY_IN_TX				2
+#define USART_READY						0
+
+//USART event and error flags
+#define USART_EVENT_TX_CMPLT			0
+#define USART_EVENT_RX_CMPLT			1
+#define USART_EVENT_IDLE				2
+#define USART_EVENT_CTS					3
+#define USART_EVENT_PE					4
+#define USART_ERR_FE					5
+#define USART_ERR_NF					6
+#define USART_ERR_ORE					7
+
 //USARtx APIs
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void USART_PeriClockControl(USARTx_RegDef_t *pUSARTx, uint8_t EnorDi);
@@ -90,8 +111,8 @@ void USART_PeriClockControl(USARTx_RegDef_t *pUSARTx, uint8_t EnorDi);
 void USART_Init(USART_Handle_t *pUSARTHandle);
 void USART_DeInit(USARTx_RegDef_t *pUSARTx);
 
-void USART_SendData(USARTx_RegDef_t *pUSARTx,uint8_t *pTxBuffer, uint32_t Len);
-void USART_ReceiveData(USARTx_RegDef_t *pUSARTx, uint8_t *pRxBuffer, uint32_t Len);
+void USART_SendData(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Len);
+void USART_ReceiveData(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, uint32_t Len);
 uint8_t USART_SendDataIT(USART_Handle_t *pUSARTHandle,uint8_t *pTxBuffer, uint32_t Len);
 uint8_t USART_ReceiveDataIT(USART_Handle_t *pUSARTHandle, uint8_t *pRxBuffer, uint32_t Len);
 
@@ -104,5 +125,6 @@ uint8_t USART_GetFlagStatus(USARTx_RegDef_t *pUSARTx , uint32_t FlagName);
 void USART_ClearFlag(USARTx_RegDef_t *pUSARTx, uint16_t StatusFlagName);
 
 void USART_ApplicationEventCallback(USART_Handle_t *pUSARTHandle,uint8_t AppEv);
+void USART_SetBaudRate(USARTx_RegDef_t *pUSARTx, uint32_t BaudRate);
 
 #endif /* INC_STM32F407XX_USARTX_DRIVER_H_ */

@@ -119,6 +119,7 @@ void I2C_ERR_IRQHandling(I2Cx_Handle_t *pI2CHandle);
 uint8_t I2C_GetFlagStatus(I2Cx_RegDef_t *pI2Cx, uint32_t flagName);
 void I2C_AppEvCallback(I2Cx_Handle_t *pI2CHandle, uint8_t AppEv);
 void I2C_ManageAck(I2Cx_RegDef_t *pI2Cx, uint8_t ENorDi);
+__attribute__ ((weak)) void I2C_ApplicationEventCallback(I2Cx_Handle_t *pI2CHandle, uint32_t FlagName);
 
 
 

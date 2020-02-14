@@ -10,9 +10,6 @@
 
 
 
-uint16_t AHB_PreScaler[8]  = {2,4,8,16,64,128,256,512};
-uint8_t  APB1_PreScaler[4] = {2,4,8,16};
-
 static void I2C_StartCondition(I2Cx_RegDef_t *pI2Cx)
 {
 	pI2Cx->CR1 |= (1 << I2C_CR1_START);
@@ -86,48 +83,6 @@ void I2C_CloseSendData (I2Cx_Handle_t *pI2CHandle) {
 
 	pI2CHandle->TxRxState = I2C_READY;
 	pI2CHandle->pTxBuffer = NULL;
-}
-
-uint32_t RCC_GetPLLOutputClk()
-{
-	return 0;
-}
-
-uint32_t RCC_GetPCLK1_Value(void)
-{
-	uint32_t pclk1, SystemClk;
-	uint8_t clksrc, temp, ahbp, apb1;
-
-	clksrc = (RCC->CFGR >> 2) & (0x03);
-	if(clksrc == 0) {
-		SystemClk = 16000000;
-	}
-	else if(clksrc == 1) {
-		SystemClk = 8000000;
-	}
-	else if(clksrc == 2) {
-		SystemClk = RCC_GetPLLOutputClk();
-	}
-
-	temp = ((RCC->CFGR >> 4) & 0xF);
-	if(temp < 8) {
-		ahbp = 1;
-	}
-	else {
-		ahbp = AHB_PreScaler[temp];
-	}
-
-	temp = ((RCC->CFGR >> 10) & 0x7);
-	if(temp < 4) {
-		apb1 = 1;
-	}
-	else {
-		apb1 = APB1_PreScaler[temp-4];
-	}
-
-	pclk1 = (SystemClk / ahbp) / apb1;
-
-	return pclk1;
 }
 
 //I2Cx APIs
@@ -500,7 +455,7 @@ void I2C_ERR_IRQHandling(I2Cx_Handle_t *pI2CHandle)
 		pI2CHandle->pI2Cx->SR1 &= ~( 1 << I2C_SR1_BERR);
 
 		//Implement the code to notify the application about the error
-	   I2C_ApplicationEventCallback(pI2CHandle,I2C_ERROR_BERR);
+	   I2C_ApplicationEventCallback(pI2CHandle, I2C_ERROR_BERR);
 	}
 	temp1 = (pI2CHandle->pI2Cx->SR1) & ( 1 << I2C_SR1_ARLO );
 	if(temp1  && temp2)
@@ -551,6 +506,11 @@ void I2C_ManageAck(I2Cx_RegDef_t *pI2Cx, uint8_t ENorDi)
 	else {
 		pI2Cx->CR1 &= ~(1 << 10);
 	}
+}
+
+__attribute__ ((weak)) void I2C_ApplicationEventCallback(I2Cx_Handle_t *pI2CHandle, uint32_t FlagName)
+{
+
 }
 
 

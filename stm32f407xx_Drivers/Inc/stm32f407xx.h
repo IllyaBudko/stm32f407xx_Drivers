@@ -643,7 +643,7 @@ typedef struct
 #define USART_CR1_RE		2
 #define USART_CR1_TE		3
 #define USART_CR1_IDLEIE	4
-#define USART_CR1_RXEIE		5
+#define USART_CR1_RXNEIE	5
 #define USART_CR1_TCIE		6
 #define USART_CR1_TXEIE		7
 #define USART_CR1_PEIE		8
@@ -766,6 +766,7 @@ typedef struct
 #include "stm32f407xx_SPIx_Driver.h"
 #include "stm32f407xx_I2Cx_Driver.h"
 #include "stm32f407xx_USARTx_Driver.h"
+#include "stm32f407xx_RCC_Driver.h"
 
 
 #endif /* STM32F407XX_H_ */
